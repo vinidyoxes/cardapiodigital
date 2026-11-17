@@ -55,3 +55,21 @@
   .builder-controls,.builder-stage{min-height:0}
   .builder-panel{flex:1;min-height:0;overflow-y:auto;scrollbar-gutter:stable;overscroll-behavior:contain}
 }
+
+/* Variações realmente distintas para cards e lista. */
+.control-hint{color:var(--muted);font-size:.65rem;line-height:1.45}
+.menu-layout-cards .public-products{grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));align-items:stretch}
+.menu-layout-cards .public-products article{display:flex;flex-direction:column;gap:0;padding:0;overflow:clip;min-inline-size:0}
+.menu-layout-cards .public-food{inline-size:100%;block-size:auto;aspect-ratio:4/3;border-radius:max(0px,calc(var(--menu-radius,15px) - 1px)) max(0px,calc(var(--menu-radius,15px) - 1px)) 0 0}
+.menu-layout-cards .public-food + div{display:flex;flex:1;flex-direction:column;padding:16px;min-inline-size:0}
+.menu-layout-cards .product-title-line h3{font-size:1rem;margin-top:0}
+.menu-layout-cards .public-products p{font-size:.75rem;margin-block:6px 16px}
+.menu-layout-cards .public-products strong{margin-block-start:auto;font-size:1rem}
+.menu-layout-list .public-products{grid-template-columns:1fr;gap:10px}
+.menu-layout-list .public-products article{grid-template-columns:88px minmax(0,1fr);align-items:center;padding:10px;gap:14px}
+.menu-layout-list .public-food{block-size:88px;inline-size:88px}
+.menu-layout-list .public-products p{margin-block:4px 8px}
+@media(max-width:640px){
+  .menu-layout-list .public-products article{grid-template-columns:76px minmax(0,1fr)}
+  .menu-layout-list .public-food{block-size:76px;inline-size:76px}
+}
