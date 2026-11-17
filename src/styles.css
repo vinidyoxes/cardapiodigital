@@ -48,3 +48,10 @@
 .context-product-editor .product-image-uploader.compact .upload-button{justify-content:center}
 .context-product-editor .control-group:last-child{border-bottom:0;margin-bottom:0}
 @media(pointer:coarse){.visual-edit-button{opacity:1;min-width:44px;min-height:44px}}
+
+/* Mantém a rolagem do formulário independente da prévia e da página. */
+@media(min-width:761px){
+  .builder-shell{height:calc(100dvh - 165px);min-height:560px}
+  .builder-controls,.builder-stage{min-height:0}
+  .builder-panel{flex:1;min-height:0;overflow-y:auto;scrollbar-gutter:stable;overscroll-behavior:contain}
+}
