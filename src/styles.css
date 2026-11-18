@@ -58,7 +58,7 @@
 
 /* Variações realmente distintas para cards e lista. */
 .control-hint{color:var(--muted);font-size:.65rem;line-height:1.45}
-.menu-layout-cards .public-products{grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));align-items:stretch}
+.public-menu.menu-layout-cards .public-products{grid-template-columns:repeat(auto-fill,230px);justify-content:start;align-items:stretch}
 .menu-layout-cards .public-products article{display:flex;flex-direction:column;gap:0;padding:0;overflow:clip;min-inline-size:0}
 .menu-layout-cards .public-food{inline-size:100%;block-size:auto;aspect-ratio:4/3;border-radius:max(0px,calc(var(--menu-radius,15px) - 1px)) max(0px,calc(var(--menu-radius,15px) - 1px)) 0 0}
 .menu-layout-cards .public-food + div{display:flex;flex:1;flex-direction:column;padding:16px;min-inline-size:0}
