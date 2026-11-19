@@ -15,6 +15,14 @@ const ACCOUNTS_KEY = 'menuflow-accounts-v2';
 const SESSION_KEY = 'menuflow-session-v2';
 const DEMO_EMAIL = 'demo@menuflow.com.br';
 const DEMO_PASSWORD = '12345678';
+const ADMIN_EMAIL = 'admin@menuflow.com.br';
+const ADMIN_PASSWORD = 'admin1234';
+const TEST_ACCOUNTS = [
+  { name: 'Teste Restaurante', email: 'teste.restaurante@menuflow.com.br' },
+  { name: 'Teste Bar', email: 'teste.bar@menuflow.com.br' },
+  { name: 'Teste Cafeteria', email: 'teste.cafeteria@menuflow.com.br' },
+  { name: 'Teste Lanchonete', email: 'teste.lanchonete@menuflow.com.br' }
+];
 
 const seed = {
   account: { name: 'Marina Costa', email: DEMO_EMAIL, password: DEMO_PASSWORD },
@@ -97,7 +105,7 @@ function Logo({ light = false }) {
   return <span className={`logo ${light ? 'logo-light' : ''}`}><span className="logo-mark"><Utensils size={18}/></span>MenuFlow</span>;
 }
 
-function Landing({ onStart, onLogin, onPreview }) {
+function Landing({ onStart, onLogin, onPreview, onAdmin }) {
   return <div className="landing">
     <header className="site-header">
       <a className="skip-link" href="#principal">Pular para o conteúdo</a>
@@ -150,7 +158,7 @@ function Landing({ onStart, onLogin, onPreview }) {
       </section>
       <section className="final-cta"><div className="container"><span className="eyebrow dark"><Sparkles/> Pronto para começar?</span><h2>Seu novo cardápio está a poucos cliques.</h2><p>Crie, publique e compartilhe hoje mesmo.</p><button className="btn btn-light btn-lg" onClick={onStart}>Criar meu cardápio grátis <ArrowRight/></button></div></section>
     </main>
-    <footer><div className="container footer-wrap"><Logo light/><p>Cardápios digitais que dão gosto de ver.</p><span>© 2026 MenuFlow</span></div></footer>
+    <footer><div className="container footer-wrap"><Logo light/><p>Cardápios digitais que dão gosto de ver.</p><button type="button" className="footer-admin" onClick={onAdmin}>Administração</button><span>© 2026 MenuFlow</span></div></footer>
   </div>;
 }
 
@@ -286,17 +294,35 @@ function PublicMenu({data,onBack,preview=false,onEditProduct}){const[category,se
 
 function UnpublishedMenu({business}){return <div className="unpublished-page"><header><Logo/></header><main><span><EyeOff/></span><small>Cardápio indisponível</small><h1>{business.name||'Este estabelecimento'} ainda está preparando o cardápio.</h1><p>O conteúdo ficará disponível aqui assim que o estabelecimento concluir a revisão e publicar.</p><a className="btn btn-primary" href={location.pathname}><ArrowLeft/> Conhecer o MenuFlow</a></main></div>}
 
+function AdminLogin({onBack,onLogin}){
+  const[error,setError]=useState('');
+  function submit(e){e.preventDefault();const fd=new FormData(e.currentTarget);if(!onLogin(fd.get('email'),fd.get('password')))setError('Credenciais administrativas incorretas.');}
+  return <div className="admin-login-page"><header><Logo/><button type="button" className="btn btn-ghost" onClick={onBack}><ArrowLeft/> Voltar</button></header><main><section className="admin-login-card"><span className="setup-icon"><Settings/></span><span className="kicker">Acesso restrito</span><h1>Administração MenuFlow</h1><p>Gerencie as contas locais usadas nesta versão de validação.</p><form onSubmit={submit}><div className="field"><label htmlFor="admin-email">E-mail administrativo</label><input id="admin-email" name="email" type="email" autoComplete="username" defaultValue={ADMIN_EMAIL} required autoFocus/></div><div className="field"><label htmlFor="admin-password">Senha</label><input id="admin-password" name="password" type="password" autoComplete="current-password" required/></div>{error&&<p className="form-error" role="alert">{error}</p>}<button className="btn btn-primary btn-lg btn-full" type="submit">Entrar na administração</button></form><div className="admin-demo-note"><b>Acesso desta versão de teste</b><span>{ADMIN_EMAIL}</span><span>Senha: {ADMIN_PASSWORD}</span></div></section></main></div>
+}
+
+function AdminPanel({accounts,onChange,onLogout}){
+  const[deleteEmail,setDeleteEmail]=useState('');const[notice,setNotice]=useState('');const deleteDialog=useRef(null);const entries=Object.entries(accounts);
+  function notify(message){setNotice(message);setTimeout(()=>setNotice(''),2800)}
+  function askDelete(email){setDeleteEmail(email);requestAnimationFrame(()=>deleteDialog.current?.showModal())}
+  function confirmDelete(){if(!deleteEmail)return;const next={...accounts};delete next[deleteEmail];onChange(next);deleteDialog.current?.close();notify(`Conta ${deleteEmail} excluída.`);setDeleteEmail('')}
+  function recreateTests(){const next={...accounts};for(const test of TEST_ACCOUNTS){const workspace=createNewWorkspace({...test,password:DEMO_PASSWORD});next[test.email]={password:DEMO_PASSWORD,workspace}}onChange(next);notify('Quatro contas de teste foram recriadas no início do setup.')}
+  return <div className="admin-page"><header className="admin-header"><Logo light/><div><span>Área administrativa</span><button type="button" className="btn btn-light" onClick={onLogout}><LogOut/> Sair</button></div></header><main className="admin-main"><section className="admin-heading"><div><span className="kicker">Operação do MVP</span><h1>Contas e testes</h1><p>Exclua cadastros locais e recupere cenários limpos para validar registro e onboarding.</p></div><button type="button" className="btn btn-primary btn-lg" onClick={recreateTests}><Plus/> Recriar contas de teste</button></section><aside className="admin-local-warning"><Settings/><div><b>Armazenamento local do navegador</b><span>Estas ações afetam somente as contas salvas neste navegador. A versão com banco de dados exigirá autenticação administrativa no servidor.</span></div></aside><section className="admin-stats" aria-label="Resumo de contas"><article><small>Total de contas</small><strong>{entries.length}</strong></article><article><small>Setup concluído</small><strong>{entries.filter(([,entry])=>entry.workspace.onboardingCompleted).length}</strong></article><article><small>Aguardando setup</small><strong>{entries.filter(([,entry])=>!entry.workspace.onboardingCompleted).length}</strong></article></section><section className="admin-accounts"><div className="admin-section-title"><div><h2>Contas cadastradas</h2><p>As contas de teste usam a senha <strong>{DEMO_PASSWORD}</strong>.</p></div></div><div className="admin-account-list">{entries.map(([email,entry])=><article key={email}><span className="admin-avatar">{entry.workspace.account.name?.slice(0,1)||email.slice(0,1)}</span><div className="admin-account-info"><b>{entry.workspace.account.name||entry.workspace.business.name||'Conta sem nome'}</b><span>{email}</span></div><span className={`admin-status ${entry.workspace.onboardingCompleted?'done':'pending'}`}>{entry.workspace.onboardingCompleted?'Setup concluído':'Aguardando setup'}</span><span className="admin-business">{entry.workspace.business.name||'Negócio ainda não informado'}</span><button type="button" className="icon-button admin-delete" onClick={()=>askDelete(email)} disabled={email===DEMO_EMAIL} aria-label={email===DEMO_EMAIL?'Conta de demonstração protegida':`Excluir conta ${email}`} title={email===DEMO_EMAIL?'Conta de demonstração protegida':'Excluir conta'}><Trash2/></button></article>)}</div></section>{notice&&<div className="toast" role="status"><BadgeCheck/> {notice}</div>}<dialog ref={deleteDialog} className="confirm-dialog" aria-labelledby="delete-account-title" onClose={()=>setDeleteEmail('')}><h2 id="delete-account-title">Excluir esta conta?</h2><p>A conta <strong>{deleteEmail}</strong> e todo o cardápio salvo neste navegador serão removidos.</p><form method="dialog" className="confirm-actions" onSubmit={e=>e.preventDefault()}><button className="btn btn-secondary" type="button" autoFocus onClick={()=>deleteDialog.current?.close()}>Cancelar</button><button className="btn btn-danger" type="button" onClick={confirmDelete}>Excluir conta</button></form></dialog></main></div>
+}
+
 function App(){
   const initial=useMemo(()=>{const accounts=loadAccounts();const session=(localStorage.getItem(SESSION_KEY)||'').toLowerCase();const active=accounts[session];const params=new URLSearchParams(location.search);const publicSlug=params.get('menu');const publicWorkspace=publicSlug?Object.values(accounts).map(entry=>entry.workspace).find(workspace=>workspace.business.slug===publicSlug):null;return{accounts,session:active?session:'',data:active?normalizeWorkspace(active.workspace):normalizeWorkspace(accounts[DEMO_EMAIL].workspace),view:publicSlug?'public':active?(active.workspace.onboardingCompleted?'dashboard':'setup'):'landing',publicWorkspace}} ,[]);
   const[accounts,setAccounts]=useState(initial.accounts);const[currentEmail,setCurrentEmail]=useState(initial.session);const[data,setDataState]=useState(initial.data);const[view,setView]=useState(initial.view);const[publicWorkspace,setPublicWorkspace]=useState(initial.publicWorkspace);const[publicPreview,setPublicPreview]=useState(false);
   function persistAccounts(next){setAccounts(next);localStorage.setItem(ACCOUNTS_KEY,JSON.stringify(next))}
+  function adminLogin(email,password){if(email.trim().toLowerCase()!==ADMIN_EMAIL||password!==ADMIN_PASSWORD)return false;localStorage.removeItem(SESSION_KEY);setCurrentEmail('');setView('admin');return true}
   function setData(next){setDataState(next);if(!currentEmail)return;persistAccounts({...accounts,[currentEmail]:{...accounts[currentEmail],workspace:next}})}
   function auth({mode,name,email,password}){const normalized=email.trim().toLowerCase();if(mode==='signup'){if(accounts[normalized])return'Já existe uma conta com este e-mail. Entre com sua senha.';const account={name:name.trim(),email:normalized,password};const workspace=createNewWorkspace(account);const next={...accounts,[normalized]:{password,workspace}};persistAccounts(next);setCurrentEmail(normalized);setDataState(workspace);localStorage.setItem(SESSION_KEY,normalized);setView('setup');return''}const entry=accounts[normalized];if(!entry||entry.password!==password)return'E-mail ou senha incorretos. Confira os dados e tente novamente.';const workspace=normalizeWorkspace(entry.workspace);setCurrentEmail(normalized);setDataState(workspace);localStorage.setItem(SESSION_KEY,normalized);setView(workspace.onboardingCompleted?'dashboard':'setup');return''}
   function finishSetup(next){let slug=next.business.slug||slugify(next.business.name);const used=new Set(Object.entries(accounts).filter(([email])=>email!==currentEmail).map(([,entry])=>entry.workspace.business.slug));let suffix=2;const base=slug;while(used.has(slug))slug=`${base}-${suffix++}`;const completed={...next,business:{...next.business,slug},onboardingCompleted:true};setData(completed);setView('dashboard')}
   function logout(){localStorage.removeItem(SESSION_KEY);setCurrentEmail('');setDataState(normalizeWorkspace(accounts[DEMO_EMAIL].workspace));setPublicPreview(false);setView('landing')}
   function openPublic(){setPublicWorkspace(data);setPublicPreview(true);setView('public')}
-  useEffect(()=>{document.title=view==='dashboard'?'Painel | MenuFlow':view==='setup'?'Configure seu cardápio | MenuFlow':view==='public'?`${(publicWorkspace||data).business.name} | Cardápio`:'MenuFlow — seu cardápio, sempre atualizado'},[view,data,publicWorkspace]);
-  if(view==='landing')return <Landing onStart={()=>setView('signup')} onLogin={()=>setView('login')} onPreview={()=>{setPublicWorkspace(normalizeWorkspace(accounts[DEMO_EMAIL].workspace));setPublicPreview(true);setView('public')}}/>;
+  useEffect(()=>{document.title=view==='admin'?'Administração | MenuFlow':view==='admin-login'?'Acesso administrativo | MenuFlow':view==='dashboard'?'Painel | MenuFlow':view==='setup'?'Configure seu cardápio | MenuFlow':view==='public'?`${(publicWorkspace||data).business.name} | Cardápio`:'MenuFlow — seu cardápio, sempre atualizado'},[view,data,publicWorkspace]);
+  if(view==='landing')return <Landing onStart={()=>setView('signup')} onLogin={()=>setView('login')} onAdmin={()=>setView('admin-login')} onPreview={()=>{setPublicWorkspace(normalizeWorkspace(accounts[DEMO_EMAIL].workspace));setPublicPreview(true);setView('public')}}/>;
+  if(view==='admin-login')return <AdminLogin onBack={()=>setView('landing')} onLogin={adminLogin}/>;
+  if(view==='admin')return <AdminPanel accounts={accounts} onChange={persistAccounts} onLogout={()=>setView('landing')}/>;
   if(view==='login'||view==='signup')return <Auth mode={view} onBack={()=>setView('landing')} onAuth={auth} onSwitch={()=>setView(view==='login'?'signup':'login')}/>;
   if(view==='setup')return <Setup data={data} onComplete={finishSetup} onLogout={logout}/>;
   if(view==='public'){const workspace=publicWorkspace||data;if(!workspace.business.published&&!publicPreview)return <UnpublishedMenu business={workspace.business}/>;return <PublicMenu data={workspace} onBack={()=>{setPublicPreview(false);setView(currentEmail?'dashboard':'landing')}}/>}
