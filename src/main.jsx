@@ -113,17 +113,17 @@ function Landing({ onStart, onLogin, onPreview, onAdmin }) {
         <nav aria-label="Principal" className="desktop-nav">
           <a href="#como-funciona">Como funciona</a><a href="#recursos">Recursos</a><a href="#preco">Preço</a>
         </nav>
-        <div className="nav-actions"><button className="btn btn-ghost" onClick={onLogin}>Entrar</button><button className="btn btn-primary" onClick={onStart}>Começar grátis <ArrowRight size={17}/></button></div>
+        <div className="nav-actions"><button className="btn btn-ghost" onClick={onLogin}>Entrar</button><button className="btn btn-primary" onClick={onStart}>Experimentar editor <ArrowRight size={17}/></button></div>
       </div>
     </header>
     <main id="principal">
       <section className="hero container">
         <div className="hero-copy">
-          <div className="eyebrow"><Sparkles size={15}/> Seu cardápio no ar em poucos minutos</div>
-          <h1>Um cardápio bonito.<br/><em>Uma experiência simples.</em></h1>
-          <p>Crie seu cardápio digital, atualize quando quiser e compartilhe com um link e QR Code que nunca mudam.</p>
-          <div className="hero-actions"><button className="btn btn-primary btn-lg" onClick={onStart}>Criar meu cardápio <ArrowRight size={18}/></button><button className="btn btn-secondary btn-lg" onClick={onPreview}><Eye size={18}/> Ver cardápio exemplo</button></div>
-          <div className="micro-proof"><span><Check/> 7 dias grátis</span><span><Check/> Sem cartão</span><span><Check/> Cancele quando quiser</span></div>
+          <div className="eyebrow"><Sparkles size={15}/> Editor visual simples e rápido</div>
+          <h1>Seu cardápio com as<br/><em>cores da sua marca.</em></h1>
+          <p>Atualize os preços sem trocar o QR Code. Experimente o editor agora e publique seu cardápio por 7 dias grátis, sem cartão.</p>
+          <div className="hero-actions"><button className="btn btn-primary btn-lg" onClick={onStart}>Experimentar o editor <ArrowRight size={18}/></button><button className="btn btn-secondary btn-lg" onClick={onPreview}><Eye size={18}/> Ver cardápio exemplo</button></div>
+          <div className="micro-proof"><span><Check/> 7 dias grátis</span><span><Check/> Sem cartão</span><span><Check/> Depois, só R$ 14,99/mês</span></div>
         </div>
         <div className="hero-visual" aria-label="Prévia de um cardápio digital no celular">
           <div className="orbit orbit-one"></div><div className="orbit orbit-two"></div>
@@ -153,10 +153,10 @@ function Landing({ onStart, onLogin, onPreview, onAdmin }) {
         <span className="kicker">Feito para a rotina real</span><h2>Mude o preço.<br/>Não mude o QR Code.</h2><p>O endereço do seu cardápio permanece o mesmo. Atualize produtos, preços ou disponibilidade e seus clientes veem tudo na hora.</p>
         <ul className="check-list"><li><Check/> Link exclusivo do seu negócio</li><li><Check/> QR Code estático em alta resolução</li><li><Check/> Produtos ilimitados no plano Pro</li><li><Check/> Funciona em qualquer celular</li></ul>
       </div><div className="feature-demo"><div className="qr-paper"><div className="tape"></div><QrCode size={190}/><strong>Aponte a câmera</strong><small>Veja nosso cardápio</small></div><div className="edit-bubble"><Pencil/><span><b>Latte da Casa</b><s>R$ 15,90</s> <strong>R$ 16,90</strong></span></div></div></div></section>
-      <section id="preco" className="section pricing-section container"><div className="section-heading"><span className="kicker">Preço simples</span><h2>Menos que um cafezinho por dia</h2></div>
-        <div className="price-card"><div><span className="plan-label">Plano Essencial</span><h3><sup>R$</sup> 39<small>,90/mês</small></h3><p>Tudo o que você precisa para colocar seu cardápio online e começar a vender.</p></div><ul><li><Check/> Cardápio digital completo</li><li><Check/> Link e QR Code fixos</li><li><Check/> Produtos e categorias ilimitados</li><li><Check/> Atualizações em tempo real</li><li><Check/> Suporte por WhatsApp</li></ul><button className="btn btn-primary btn-lg" onClick={onStart}>Testar grátis por 7 dias <ArrowRight/></button></div>
+      <section id="preco" className="section pricing-section container"><div className="section-heading"><span className="kicker">Preço simples</span><h2>Comece grátis. Continue se fizer sentido.</h2><p>Sem taxa de adesão, sem cartão no teste e sem surpresas.</p></div>
+        <div className="price-card"><div><span className="plan-label">Plano Essencial</span><h3><sup>R$</sup> 14<small>,99/mês</small></h3><p>Os primeiros 7 dias são grátis. Depois, assine somente se quiser manter seu cardápio publicado.</p></div><ul><li><Check/> Cardápio com as cores da sua marca</li><li><Check/> Link e QR Code que não mudam</li><li><Check/> Produtos e categorias ilimitados</li><li><Check/> Atualizações de preços em tempo real</li><li><Check/> Sem cartão durante o teste</li></ul><button className="btn btn-primary btn-lg" onClick={onStart}>Experimentar o editor grátis <ArrowRight/></button></div>
       </section>
-      <section className="final-cta"><div className="container"><span className="eyebrow dark"><Sparkles/> Pronto para começar?</span><h2>Seu novo cardápio está a poucos cliques.</h2><p>Crie, publique e compartilhe hoje mesmo.</p><button className="btn btn-light btn-lg" onClick={onStart}>Criar meu cardápio grátis <ArrowRight/></button></div></section>
+      <section className="final-cta"><div className="container"><span className="eyebrow dark"><Sparkles/> Pronto para experimentar?</span><h2>Monte seu cardápio com a cara da sua marca.</h2><p>Publique por 7 dias grátis, sem cartão. Depois, R$ 14,99/mês se quiser continuar.</p><button className="btn btn-light btn-lg" onClick={onStart}>Experimentar o editor <ArrowRight/></button></div></section>
     </main>
     <footer><div className="container footer-wrap"><Logo light/><p>Cardápios digitais que dão gosto de ver.</p><button type="button" className="footer-admin" onClick={onAdmin}>Administração</button><span>© 2026 MenuFlow</span></div></footer>
   </div>;
