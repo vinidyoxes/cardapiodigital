@@ -127,22 +127,7 @@ function Landing({ onStart, onLogin, onPreview, onAdmin }) {
           <div className="hero-actions"><button className="btn btn-primary btn-lg" onClick={onStart}>Experimentar o editor <ArrowRight size={18}/></button><button className="btn btn-secondary btn-lg" onClick={onPreview}><Eye size={18}/> Ver cardápio exemplo</button></div>
           <div className="micro-proof"><span><Check/> 7 dias grátis</span><span><Check/> Sem cartão</span><span><Check/> Depois, só R$ 14,99/mês</span></div>
         </div>
-        <div className="hero-visual" aria-label="Mockup completo de um cardápio digital personalizado no celular">
-          <div className="orbit orbit-one"></div><div className="orbit orbit-two"></div>
-          <div className="phone">
-            <div className="phone-top"></div><div className="phone-screen">
-              <div className="mini-cover"><div className="mini-brand-row"><span className="mini-logo"><img src="/qr-example-logo.svg" alt="Logo Bossa Café" width="48" height="48"/></span><span className="mini-open"><i></i> Aberto</span></div><strong>Bossa Café</strong><small>Cafés especiais, brunch e afeto.</small><em>Rua das Flores, 128 · até 19h</em></div>
-              <label className="mini-search"><Search/><span className="visually-hidden">Buscar no exemplo</span><input tabIndex="-1" readOnly placeholder="Buscar no cardápio"/></label>
-              <div className="mini-tabs"><b>Cafés</b><span>Brunch</span><span>Doces</span></div>
-              <MiniProduct name="Latte da Casa" desc="Espresso, leite e baunilha" price="R$ 16,90" image="/demo-products/latte.jpg" priority />
-              <MiniProduct name="Toast Caprese" desc="Pesto, tomate e muçarela" price="R$ 28,90" image="/demo-products/toast-caprese.jpg" />
-              <MiniProduct name="Bolo de Cenoura" desc="Cobertura de chocolate" price="R$ 14,50" image="/demo-products/bolo-cenoura.jpg" />
-            </div>
-          </div>
-          <div className="floating-card card-qr"><QRCodeCanvas value="https://menuflow.com/bossa-cafe" size={44} fgColor="#5143b2" bgColor="#ffffff" level="H" imageSettings={{src:'/qr-example-logo.svg',height:12,width:12,excavate:true}}/><div><strong>QR Code com logo</strong><span>Personalizado e permanente</span></div></div>
-          <div className="floating-card card-theme"><Palette/><div><strong>Cores da sua marca</strong><span><i></i><i></i><i></i> Personalize tudo</span></div></div>
-          <div className="floating-card card-update"><BadgeCheck/><div><strong>Atualizado!</strong><span>Preço alterado em tempo real</span></div></div>
-        </div>
+        <figure className="hero-visual hero-png-mockup"><img src="/menuflow-landing-mockup.png" alt="Cardápio digital Brasa e Folha exibido em um celular, com fotos de produtos, cores personalizadas, QR Code com logo e atualização de preço em tempo real" width="1122" height="1402" fetchPriority="high"/><figcaption className="visually-hidden">Exemplo completo de um cardápio criado e personalizado no MenuFlow.</figcaption></figure>
       </section>
       <section className="trust-strip"><div className="container"><span>Feito para quem serve experiências</span><div className="business-types"><b><Utensils/> Restaurantes</b><b><Coffee/> Cafeterias</b><b><CircleDollarSign/> Bares</b><b><Leaf/> Lanchonetes</b></div></div></section>
       <section id="como-funciona" className="section container">
@@ -165,8 +150,6 @@ function Landing({ onStart, onLogin, onPreview, onAdmin }) {
     <footer><div className="container footer-wrap"><Logo light/><p>Cardápios digitais que dão gosto de ver.</p><button type="button" className="footer-admin" onClick={onAdmin}>Administração</button><span>© 2026 MenuFlow</span></div></footer>
   </div>;
 }
-
-function MiniProduct({name, desc, price, image, priority=false}) { return <div className="mini-product"><img className="food-thumb" src={image} alt="" width="58" height="58" fetchPriority={priority?'high':undefined}/><div><div className="mini-product-title"><b>{name}</b>{priority&&<span>Popular</span>}</div><small>{desc}</small><strong>{price}</strong></div></div> }
 
 function Auth({ mode, onBack, onAuth, onSwitch }) {
   const [show, setShow] = useState(false); const [error, setError] = useState('');
